@@ -3,4 +3,8 @@ project(ShiftDown)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(ShiftDown main.cpp)
+set(MY_BASE_FLAGS "-O1 -fno-unroll-loops -fno-tree-vectorize -Wall -Wextra -march=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MY_BASE_FLAGS}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MY_BASE_FLAGS}")
+
+add_executable(ShiftDown ShiftDown.cpp)
