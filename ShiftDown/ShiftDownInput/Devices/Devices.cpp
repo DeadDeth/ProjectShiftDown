@@ -8,7 +8,6 @@ void ShiftDownDevices::Devices::find_devices() {
   uint64_t names_index{0};
   uint64_t events_index{0};
 
-
   std::ifstream devices("/proc/bus/input/devices", std::ios::binary);
   char sign{'\0'};
   while (devices.get(sign)) {
@@ -36,6 +35,7 @@ void ShiftDownDevices::Devices::find_devices() {
             devices.get(sign);
           }
           names_index += name_lenght;
+          evs_index++;
         }
       }
     }
@@ -53,7 +53,12 @@ void ShiftDownDevices::Devices::find_devices() {
         devices.get(sign);
         devices.get(sign);
         if (sign == 'E') {
+          devices.get(sign);
           if (sign == 'V') {
+            devices.get(sign);
+            if (sign == '=') {
+
+            }
             //logika brania eventu :)
           }
         }

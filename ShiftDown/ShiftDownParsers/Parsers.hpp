@@ -3,12 +3,14 @@
 
 namespace ShiftDownParsers{
 
-uint64_t pars_uint64_hex(const char* number) {
+inline uint64_t pars_uint64_hex(const char* number) {
   uint64_t parsed_number{0};
+  uint64_t miejsce{0};
+
   uint64_t i{0};
   do{i++;}while (number[i] != '\0');
   i--;
-  uint64_t miejsce{0};
+
   do {
     uint64_t temp_number{0};
     switch (number[i]) {
@@ -135,6 +137,30 @@ uint64_t pars_uint64_hex(const char* number) {
     i--;
   } while (i+1 != 0);
 
+
+  return parsed_number;
+}
+
+inline uint64_t pars_uint64(const char* number) {
+  uint64_t miejsce{0};
+  uint64_t parsed_number{0};
+  uint64_t i{0};
+
+  do{i++;}while (number[i] != '\0');
+  i--;
+
+  do {
+    uint64_t temp_number{0};
+
+    temp_number = number[i] & 0b00001111;
+    for (uint64_t k = 0; k != miejsce; k++) {
+      temp_number = temp_number * 10;
+    }
+    parsed_number += temp_number;
+    miejsce++;
+
+    i--;
+  } while (i+1 > 0);
 
   return parsed_number;
 }
