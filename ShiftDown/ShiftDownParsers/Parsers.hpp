@@ -8,7 +8,7 @@ inline uint64_t pars_uint64_hex(const char* number) {
   uint64_t miejsce{0};
 
   uint64_t i{0};
-  do{i++;}while (number[i] != '\0');
+  do{i++;}while (number[i] != '\0' && number[i] != '\n');
   i--;
 
   do {
@@ -146,7 +146,7 @@ inline uint64_t pars_uint64(const char* number) {
   uint64_t parsed_number{0};
   uint64_t i{0};
 
-  do{i++;}while (number[i] != '\0');
+  do{i++;}while (number[i] != '\0' && number[i] != '\n');
   i--;
 
   do {
