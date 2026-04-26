@@ -33,16 +33,16 @@ void ShiftDownInput::Input::start_reading_input() {
   uint64_t i{0};
 
   //wymaga uprawnien root do odpalenia sie wszystkich plikow pomyslnie
-  
+
   char file_path[11+8] = "/dev/input/";
   while (keyboard_events[i][5] != '\0') {
     for (uint64_t k = 0; k < 8; k++) {
       file_path[k+11] = keyboard_events[i][k];
     }
     keyboards_files[i].open(file_path, std::ios::binary);
-    if (keyboards_files[i]) {
-      std::cout << "Plik otwarty keyboard: " << file_path <<std::endl;
-    }
+    // if (keyboards_files[i]) {
+    //   std::cout << "Plik otwarty keyboard: " << file_path <<std::endl;
+    // }
     i++;
   }
   i = 0;
@@ -51,9 +51,9 @@ void ShiftDownInput::Input::start_reading_input() {
       file_path[k+11] = mouse_events[i][k];
     }
     mouse_files[i].open(file_path, std::ios::binary);
-    if (mouse_files[i]) {
-      std::cout << "Plik otwarty mouse: " << file_path <<std::endl;
-    }
+    // if (mouse_files[i]) {
+    //   std::cout << "Plik otwarty mouse: " << file_path <<std::endl;
+    // }
     i++;
   }
   i = 0;
@@ -62,9 +62,9 @@ void ShiftDownInput::Input::start_reading_input() {
       file_path[k+11] = joysticks_events[i][k];
     }
     joysticks_files[i].open(file_path, std::ios::binary);
-    if (joysticks_files[i]) {
-      std::cout << "Plik otwarty joystick: " << file_path <<std::endl;
-    }
+    // if (joysticks_files[i]) {
+    //   std::cout << "Plik otwarty joystick: " << file_path <<std::endl;
+    // }
     i++;
   }
   i = 0;
@@ -73,9 +73,9 @@ void ShiftDownInput::Input::start_reading_input() {
       file_path[k+11] = headphones_events[i][k];
     }
     headphones_files[i].open(file_path, std::ios::binary);
-    if (headphones_files[i]) {
-      std::cout << "Plik otwarty headphones: " << file_path <<std::endl;
-    }
+    // if (headphones_files[i]) {
+    //   std::cout << "Plik otwarty headphones: " << file_path <<std::endl;
+    // }
     i++;
   }
 
