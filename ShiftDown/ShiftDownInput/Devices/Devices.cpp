@@ -30,7 +30,7 @@ void ShiftDownDevices::Devices::debug_test() const{
     for (uint64_t j = 0; j < 10 - lines_number; j++) {
       std::cout << " ";
     }
-    std::cout << "EVENT" << events[event_index];
+    std::cout << "EVENT" << std::dec << events[event_index];
     event_index++;
     std::cout << std::endl;
   }
@@ -210,6 +210,7 @@ void ShiftDownDevices::Devices::find_devices() const{
       }
     }
   }
+  devices.close();
 }
 
 void ShiftDownDevices::Devices::categorize() const{

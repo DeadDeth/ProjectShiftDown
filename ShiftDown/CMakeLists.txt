@@ -14,4 +14,6 @@ add_executable(ShiftDown ShiftDown.cpp
         ShiftDownInput/Input/Input.hpp
         ShiftDownInput/Input/Input.cpp
         ShiftDownInput/Output/Output.hpp
-        ShiftDownInput/Output/Output.cpp)
+        ShiftDownInput/Output/Output.cpp
+        ShiftDownInput/ShiftDownInput.hpp
+        ShiftDown.hpp)

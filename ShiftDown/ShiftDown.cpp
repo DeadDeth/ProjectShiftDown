@@ -1,9 +1,11 @@
-#include "ShiftDownInput/Devices/Devices.hpp"
+#include "ShiftDown.hpp"
+#include "ShiftDownParsers/Parsers.hpp"
+
+#include <iostream>
 
 int main() {
 
-  ShiftDownDevices::Devices deivces;
-  deivces.debug_test();
+  ShiftDown::ShiftDownInputStart();
 
   return 0;
 }

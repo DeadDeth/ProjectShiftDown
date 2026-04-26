@@ -165,5 +165,24 @@ inline uint64_t pars_uint64(const char* number) {
   return parsed_number;
 }
 
+inline char* pars_char(uint64_t number, char* buffer) {
+
+  buffer[20] = '\0';
+
+  if (number == 0) {
+    buffer[19] = '0';
+    return &buffer[19];
+  }
+
+  uint64_t i = 19;
+  while (number != 0) {
+    uint64_t rest = number % 10;
+    number /= 10;
+    buffer[i] = 0b00110000 | rest;
+    i--;
+  }
+  return &buffer[i + 1];
+}
+
 
 }

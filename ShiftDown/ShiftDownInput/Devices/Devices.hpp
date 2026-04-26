@@ -4,24 +4,26 @@
 #include <immintrin.h>
 
 namespace ShiftDownDevices {
-
 class Devices {
-  //zmienne dla tablic z eventami i urzadzeniami :)
+  // zmienne dla tablic z eventami i urzadzeniami :)
   uint64_t event_count{64};
   uint64_t name_lenght{64};
-  uint64_t* evs;
-  uint64_t* events;
-  char* names;
-  void find_devices() const; // ta funckja szuka tego gowna w /proc/bus/input/devices
+  uint64_t *evs;
+  uint64_t *events;
+  char *names;
+  void
+  find_devices() const; // ta funckja szuka tego gowna w /proc/bus/input/devices
   //========================================================
 
-  //kategoryzowanie tego syfu XDDD zeby dalo sie korzystac ze wszystkiego :)
+  // kategoryzowanie tego syfu XDDD zeby dalo sie korzystac ze wszystkiego :)
   struct alignas(64) device_info {
     char name[64]{'\0'};
     uint64_t ev{0};
     uint64_t event{0};
 
-    device_info(uint64_t device_name_index, uint64_t device_ev, uint64_t device_event, uint64_t name_lenght,const char* names){
+    device_info(uint64_t device_name_index, uint64_t device_ev,
+                uint64_t device_event, uint64_t name_lenght,
+                const char *names) {
       for (uint64_t i = 0; i < name_lenght; i++) {
         name[i] = names[device_name_index + i];
       }
@@ -30,31 +32,32 @@ class Devices {
     }
     ~device_info() = default;
   };
-  device_info* keyboards;
-  device_info* mouses;
-  device_info* joysticks;
-  device_info* headphones;
-  device_info* speakers;
-  device_info* chuj_wie_co_to;
   void categorize() const;
   //========================================================
 
 public:
+
+  device_info *keyboards;
+  device_info *mouses;
+  device_info *joysticks;
+  device_info *headphones;
+  device_info *speakers;
+  device_info *chuj_wie_co_to;
+
   Devices() {
 
-    evs = (uint64_t*)_mm_malloc(sizeof(uint64_t) * event_count, 64);
-    events = (uint64_t*)_mm_malloc(sizeof(uint64_t) * event_count, 64);
-    names = (char*)_mm_malloc(sizeof(char) * event_count * name_lenght, 64);
+    evs = (uint64_t *)_mm_malloc(sizeof(uint64_t) * event_count, 64);
+    events = (uint64_t *)_mm_malloc(sizeof(uint64_t) * event_count, 64);
+    names = (char *)_mm_malloc(sizeof(char) * event_count * name_lenght, 64);
 
+    keyboards = (device_info *)_mm_malloc(sizeof(device_info) * 16, 64);
+    mouses = (device_info *)_mm_malloc(sizeof(device_info) * 16, 64);
+    joysticks = (device_info *)_mm_malloc(sizeof(device_info) * 16, 64);
+    headphones = (device_info *)_mm_malloc(sizeof(device_info) * 16, 64);
+    speakers = (device_info *)_mm_malloc(sizeof(device_info) * 16, 64);
+    chuj_wie_co_to = (device_info *)_mm_malloc(sizeof(device_info) * 16, 64);
 
-    keyboards = (device_info*)_mm_malloc(sizeof(device_info) * 16, 64);
-    mouses = (device_info*)_mm_malloc(sizeof(device_info) * 16, 64);
-    joysticks = (device_info*)_mm_malloc(sizeof(device_info) * 16, 64);
-    headphones = (device_info*)_mm_malloc(sizeof(device_info) * 16, 64);
-    speakers = (device_info*)_mm_malloc(sizeof(device_info) * 16, 64);
-    chuj_wie_co_to = (device_info*)_mm_malloc(sizeof(device_info) * 16, 64);
-
-    //zerowanie tablic
+    // zerowanie tablic
     for (uint64_t i = 0; i < event_count; i++) {
       evs[i] = 0;
     }
@@ -65,15 +68,12 @@ public:
       events[i] = 0;
     }
 
-    //wolanie tego co tego szuka XD
+    // wolanie tego co tego szuka XD
     find_devices();
-    //kategoryzowanie syfu
+    // kategoryzowanie syfu
     categorize();
-
-    //usuwanie tablic bo smieca tylko i w chuj ramu to je
-
   }
-  ~Devices(){
+  ~Devices() {
     _mm_free(evs);
     _mm_free(names);
     _mm_free(events);
@@ -86,8 +86,4 @@ public:
   }
   void debug_test() const;
 };
-
 }
-
-
-
