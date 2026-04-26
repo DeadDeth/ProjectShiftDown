@@ -1,7 +1,8 @@
 #include "Devices.hpp"
 #include "../../ShiftDownParsers/Parsers.hpp"
 
-#include "fstream"
+#include <iostream>
+#include <fstream>
 
 void ShiftDownDevices::Devices::debug_test() const{
 
@@ -17,7 +18,7 @@ void ShiftDownDevices::Devices::debug_test() const{
     for (uint64_t j = k; j < i+name_lenght - 20; j++) {
       std::cout << " ";
     }
-    std::cout << "EV: " << evs[evs_index];
+    std::cout << "EV: " << std::hex << evs[evs_index];
     evs_index++;
 
     uint64_t temp_number_evs{evs[evs_index-1]};
@@ -33,6 +34,63 @@ void ShiftDownDevices::Devices::debug_test() const{
     event_index++;
     std::cout << std::endl;
   }
+
+  //debug kategorii czy to dziala ? w ogole XD
+  std::cout << std::endl;
+  std::cout << "=================KEYBOARDS=================" << std::endl;
+  for (uint64_t i = 0; i < 16; i++) {
+    if (keyboards[i].name[0] == '\0') continue;
+    std::cout << "NAME=" << keyboards[i].name << std::endl;
+    std::cout << "EV=" << keyboards[i].ev << std::endl;
+    std::cout << "EVENT=" << keyboards[i].event << std::endl;
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  std::cout << "=================MOUSES=================" << std::endl;
+  for (uint64_t i = 0; i < 16; i++) {
+    if (mouses[i].name[0] == '\0') continue;
+    std::cout << "NAME=" << mouses[i].name << std::endl;
+    std::cout << "EV=" << mouses[i].ev << std::endl;
+    std::cout << "EVENT=" << mouses[i].event << std::endl;
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  std::cout << "=================JOYSTICKS=================" << std::endl;
+  for (uint64_t i = 0; i < 16; i++) {
+    if (joysticks[i].name[0] == '\0') continue;
+    std::cout << "NAME=" << joysticks[i].name << std::endl;
+    std::cout << "EV=" << joysticks[i].ev << std::endl;
+    std::cout << "EVENT=" << joysticks[i].event << std::endl;
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  std::cout << "=================HEADPHONES=================" << std::endl;
+  for (uint64_t i = 0; i < 16; i++) {
+    if (headphones[i].name[0] == '\0') continue;
+    std::cout << "NAME=" << headphones[i].name << std::endl;
+    std::cout << "EV=" << headphones[i].ev << std::endl;
+    std::cout << "EVENT=" << headphones[i].event << std::endl;
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  std::cout << "=================SPEAKERS=================" << std::endl;
+  for (uint64_t i = 0; i < 16; i++) {
+    if (speakers[i].name[0] == '\0') continue;
+    std::cout << "NAME=" << speakers[i].name << std::endl;
+    std::cout << "EV=" << speakers[i].ev << std::endl;
+    std::cout << "EVENT=" << speakers[i].event << std::endl;
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  std::cout << "=================CHUJ WIE CO=================" << std::endl;
+  for (uint64_t i = 0; i < 16; i++) {
+    if (chuj_wie_co_to[i].name[0] == '\0') continue;
+    std::cout << "NAME=" << chuj_wie_co_to[i].name << std::endl;
+    std::cout << "EV=" << chuj_wie_co_to[i].ev << std::endl;
+    std::cout << "EVENT=" << chuj_wie_co_to[i].event << std::endl;
+    std::cout << std::endl;
+  }
+
 }
 
 void ShiftDownDevices::Devices::find_devices() const{
@@ -145,11 +203,68 @@ void ShiftDownDevices::Devices::find_devices() const{
                 ev_temp_buffer[ev_local_index] = sign;
                 ev_local_index++;
               }
-              evs[evs_index-1] = ShiftDownParsers::pars_uint64(ev_temp_buffer);
+              evs[evs_index-1] = ShiftDownParsers::pars_uint64_hex(ev_temp_buffer);
             }
           }
         }
       }
+    }
+  }
+}
+
+void ShiftDownDevices::Devices::categorize() const{
+
+  uint64_t ki{0};
+  uint64_t mi{0};
+  uint64_t ji{0};
+  uint64_t hi{0};
+  uint64_t si{0};
+  uint64_t ci{0};
+
+  for (uint64_t i = 0; i < event_count; i++) {
+    uint64_t temp_evs = evs[i];
+
+    if (temp_evs == 0) continue;
+
+    //bool ev_sync = temp_evs & 0x1;
+    bool ev_key  = temp_evs & 0x2;
+    bool ev_rel  = temp_evs & 0x4;
+    bool ev_abs  = temp_evs & 0x8;
+    //bool ev_msv  = temp_evs & 0x10;
+    //bool ev_sw   = temp_evs & 0x20;
+    //bool ev_led  = temp_evs & 0x20000;
+    bool ev_snd  = temp_evs & 0x40000;
+    bool ev_rep  = temp_evs & 0x100000;
+    //bool ev_ff   = temp_evs & 0x200000;
+
+    device_info info(i * name_lenght, evs[i], events[i], name_lenght, names);
+
+    if (ev_key) {
+      // ma przyciski to filtracja leci
+      if (ev_rel) {
+        // osie relatywne, myszki maja
+        mouses[mi++] = info;
+      }
+      else if (ev_abs) {
+        //osie absolutne, to bardziej joysticki
+        joysticks[ji++] = info;
+      }
+      else if (ev_rep) {
+        // jesli nie myszka to klawa co nie?
+        keyboards[ki++] = info;
+      }
+      else {
+        //sluchawki, jak ma klikanie ale bez innych pierdol
+        headphones[hi++] = info;
+      }
+    }
+    else if (ev_snd) {
+      // piszczy, bez klawiszy
+      speakers[si++] = info;
+    }
+    else {
+      //reszta syfu i gowna co nie ma kategorii XD
+      chuj_wie_co_to[ci++] = info;
     }
   }
 }
