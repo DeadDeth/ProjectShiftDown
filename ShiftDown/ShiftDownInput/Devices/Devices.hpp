@@ -13,7 +13,7 @@ class Devices {
   uint64_t* events;
   char* names;
   void find_devices() const; // ta funckja szuka tego gowna w /proc/bus/input/devices
-
+  //========================================================
 
   //kategoryzowanie tego syfu XDDD zeby dalo sie korzystac ze wszystkiego :)
   struct alignas(64) device_info {
@@ -30,7 +30,6 @@ class Devices {
     }
     ~device_info() = default;
   };
-
   device_info* keyboards;
   device_info* mouses;
   device_info* joysticks;
@@ -38,13 +37,15 @@ class Devices {
   device_info* speakers;
   device_info* chuj_wie_co_to;
   void categorize() const;
+  //========================================================
 
 public:
   Devices() {
 
     evs = (uint64_t*)_mm_malloc(sizeof(uint64_t) * event_count, 64);
-    names = (char*)_mm_malloc(sizeof(char) * event_count * name_lenght, 64);
     events = (uint64_t*)_mm_malloc(sizeof(uint64_t) * event_count, 64);
+    names = (char*)_mm_malloc(sizeof(char) * event_count * name_lenght, 64);
+
 
     keyboards = (device_info*)_mm_malloc(sizeof(device_info) * 16, 64);
     mouses = (device_info*)_mm_malloc(sizeof(device_info) * 16, 64);
@@ -68,12 +69,14 @@ public:
     find_devices();
     //kategoryzowanie syfu
     categorize();
+
+    //usuwanie tablic bo smieca tylko i w chuj ramu to je
+
   }
   ~Devices(){
     _mm_free(evs);
     _mm_free(names);
     _mm_free(events);
-
     _mm_free(keyboards);
     _mm_free(mouses);
     _mm_free(joysticks);

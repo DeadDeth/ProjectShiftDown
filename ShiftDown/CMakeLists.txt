@@ -10,4 +10,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MY_BASE_FLAGS}")
 add_executable(ShiftDown ShiftDown.cpp
         ShiftDownInput/Devices/Devices.hpp
         ShiftDownInput/Devices/Devices.cpp
-        ShiftDownParsers/Parsers.hpp)
+        ShiftDownParsers/Parsers.hpp
+        ShiftDownInput/Input/Input.hpp
+        ShiftDownInput/Input/Input.cpp
+        ShiftDownInput/Output/Output.hpp
+        ShiftDownInput/Output/Output.cpp)
