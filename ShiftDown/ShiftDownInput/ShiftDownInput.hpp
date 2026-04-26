@@ -10,8 +10,8 @@ namespace ShiftDown {
     ShiftDownDevices::Devices devices;
     //devices.debug_test();
     ShiftDownInput::Input input(&devices);
-    input.debug_test();
-    
+    //input.debug_test();
+
     //ShiftDownOutput::Output output;
 
   }

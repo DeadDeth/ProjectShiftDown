@@ -3,6 +3,8 @@
 #include "../Devices/Devices.hpp"
 
 #include <cstdint>
+#include <thread>
+
 
 namespace ShiftDownDevices {
 class Devices;
@@ -19,7 +21,18 @@ class Input {
   char joysticks_events[16][8]{{'\0'},{'\0'}};
   char headphones_events[16][8]{{'\0'},{'\0'}};
 
+
+  std::ifstream keyboards_files[16];
+  std::ifstream mouse_files[16];
+  std::ifstream joysticks_files[16];
+  std::ifstream headphones_files[16];
+
+  char get_keyboard_input();
+  uint64_t get_mouse_position_and_input();
+  void start_reading_input();
+
 public:
+
   Input(ShiftDownDevices::Devices* devices_pointer) : devices(devices_pointer) {
     for (uint64_t i = 0; i < 16; i++) {
       if (devices->keyboards[i].name[0] != '\0' && devices->keyboards[i].name[0] != '\n') {
@@ -109,8 +122,12 @@ public:
         }
       }
     }
+
+    std::thread input_thread(&Input::start_reading_input, this);
+    input_thread.join();
   }
   ~Input() = default;
+
 
   void debug_test();
 };
